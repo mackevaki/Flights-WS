@@ -6,7 +6,6 @@ import com.mycompany.flights.spr.objects.Aircraft;
 import com.mycompany.flights.spr.objects.City;
 import com.mycompany.flights.spr.objects.Place;
 import com.mycompany.flights.utils.GMTCalendar;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,13 +14,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class FlightDB extends AbstractObjectDB<Flight> {
-    public final static String TABLE_FLIGHT = "avia.flight";
-
-    private static FlightDB instance;
+    public final static String TABLE_FLIGHT = "flight";
 
     private FlightDB() {
         super(TABLE_FLIGHT);
     }
+    private static FlightDB instance;
 
     public static FlightDB getInstance() {
         if (instance == null) {
@@ -49,18 +47,20 @@ public class FlightDB extends AbstractObjectDB<Flight> {
 
         Aircraft aircraft = AircraftDB.getInstance().executeObject(AircraftDB.getInstance().getObjectByID(rs.getLong("aircraft_id")));
         flight.setAircraft(aircraft);
-
-        ArrayList<Place> places = PlaceDB.getInstance().executeList(PlaceDB.getInstance().getPlaceStmtBusy(aircraft.getId(), flight.getId()));
-        aircraft.setPlaceList(places);
-
-        // если есть хоть 1 свободное место
-        for (Place place : places) {
+        
+        ArrayList<Place> placeList = PlaceDB.getInstance().executeList(PlaceDB.getInstance().getPlaceStmtBusy(aircraft.getId(), flight.getId()));
+        aircraft.setPlaceList(placeList);
+        
+        ArrayList<Place> freePlaceList = new ArrayList<>();
+        for (Place place : placeList) {
             if (!place.isBusy()){
                 flight.setExistFreePlaces(true);
-                break;
+                freePlaceList.add(place);
             }
-        }
-
+        }      
+          
+        aircraft.setFreePlaceList(freePlaceList);
+        
         City city_from = CityDB.getInstance().executeObject(CityDB.getInstance().getObjectByID(rs.getLong("city_from_id")));
         flight.setCityFrom(city_from);
 
@@ -100,11 +100,9 @@ public class FlightDB extends AbstractObjectDB<Flight> {
         dateTime.set(Calendar.SECOND, 0);
         dateTime.set(Calendar.MILLISECOND, 0);
 
-
         // в каком интервали искать (по-умолчанию - в пределах суток)
         Calendar dateTimeInterval = (Calendar) (dateTime.clone());
         dateTimeInterval.add(Calendar.DATE, INTERVAL);
-
 
         stmt.setLong(1, dateTime.getTimeInMillis());
         stmt.setLong(2, dateTimeInterval.getTimeInMillis());
@@ -117,14 +115,12 @@ public class FlightDB extends AbstractObjectDB<Flight> {
         Connection conn = AviaDB.getInstance().getConnection();
         PreparedStatement stmt = conn.prepareStatement("select * from " + TABLE_FLIGHT + " where date_depart>=? and  date_depart<?");
 
-
         // оставить только дату, чтобы искать рейсы за все 24 часа
         clearTime(dateDepart);
 
         // в каком интервали искать (по-умолчанию - в пределах суток)
         Calendar dateTimeInterval = (Calendar) (dateDepart.clone());
         dateTimeInterval.add(Calendar.DATE, INTERVAL);
-
 
         stmt.setLong(1, dateDepart.getTimeInMillis());
         stmt.setLong(2, dateTimeInterval.getTimeInMillis());

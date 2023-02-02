@@ -1,11 +1,11 @@
 package com.mycompany.flights.spr.objects;
-public class City {
 
+public class City {
     private long id;
     private String name;
     private String desc;
-    private String code;
     private Country country;
+    private String code;
 
     public long getId() {
         return id;
@@ -31,14 +31,6 @@ public class City {
         this.desc = desc;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String postCode) {
-        this.code = postCode;
-    }
-
     public Country getCountry() {
         return country;
     }
@@ -47,8 +39,16 @@ public class City {
         this.country = country;
     }
 
-    @Override
-    public String toString() {
-        return name;
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+	@Override
+	public String toString() {
+		return name; 
     }
 }

@@ -3,59 +3,64 @@ package com.mycompany.flights.interfaces.impls;
 import com.mycompany.flights.database.ReservationDB;
 import com.mycompany.flights.interfaces.Check;
 import com.mycompany.flights.objects.Reservation;
-import com.mycompany.flights.utils.GMTCalendar;
-
 import java.sql.SQLException;
-import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class CheckImpl implements Check {
-
-    private ReservationDB reservationDB = ReservationDB.getInstance();
+public class CheckImpl implements Check{
+    private ReservationDB reservDB = ReservationDB.getInstance();
 
     @Override
     public Reservation checkReservationByCode(String code) {
-        Reservation reservation = null;
+        Reservation reserv = null;
         try {
-            reservation = reservationDB.executeObject(reservationDB.getStmtByCode(code));
-            return reservation;
-        } catch (SQLException e) {
-            e.printStackTrace();
+            reserv = reservDB.executeObject(reservDB.getStmtByCode(code));
+        } catch (SQLException ex) {
+            Logger.getLogger(CheckImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        
+        return reserv;
     }
+    
+     
+//    @Override
+//    public Reservation checkReservationByDateReserv(long date) {
+//        Reservation reserv = null;
+//        try {
+//            Calendar c = GMTCalendar.getInstance();
+//            c.setTimeInMillis(date);
+//            
+//            reserv = reservDB.executeObject(reservDB.getStmtByDateReserv(c));
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CheckImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return reserv;
+//    }
+//    
+//    @Override
+//    public Reservation checkReservationByDateReserv(String docNumber) {
+//        Reservation reserv = null;
+//        try {
+//            reserv = reservDB.executeObject(reservDB.getStmtByDocumentNumber(docNumber));
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CheckImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return reserv;
+//    }
+//    
+//    
+//    @Override
+//      public Reservation checkReservationByFamilyName(String familyName) {
+//        Reservation reserv = null;
+//        try {
+//            reserv = reservDB.executeObject(reservDB.getStmtByFamilyName(familyName));
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CheckImpl.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        return reserv;
+//    }
 
-    @Override
-    public Reservation checkReservationByDateReserv(long date) {
-        Calendar c = GMTCalendar.getInstance();
-        c.setTimeInMillis(date);
-        Reservation reservation = null;
-        try {
-            reservation = reservationDB.executeObject(reservationDB.getStmtByDateReserv(c));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return reservation;
-    }
-
-    @Override
-    public Reservation checkReservationByDocument(String doc) {
-        Reservation reservation = null;
-        try {
-            reservation = reservationDB.executeObject(reservationDB.getStmtByDocumentNumber(doc));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return reservation;
-    }
-
-    @Override
-    public Reservation checkReservationByFamily(String family) {
-        Reservation reservation = null;
-        try {
-            reservation = reservationDB.executeObject(reservationDB.getStmtByFamilyName(family));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return reservation;
-    }
 }

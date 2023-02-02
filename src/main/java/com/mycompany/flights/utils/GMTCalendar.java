@@ -4,10 +4,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class GMTCalendar {
-    private GMTCalendar() {
-
-    }
-
     public static Calendar getInstance() {
         return Calendar.getInstance(TimeZone.getTimeZone("GMT"));
     }

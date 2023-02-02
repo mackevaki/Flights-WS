@@ -6,4 +6,5 @@ import com.mycompany.flights.spr.objects.Place;
 
 public interface Buy {
     boolean buyTicket(Flight flight, Place place, Passenger passenger, String addInfo);
+
 }

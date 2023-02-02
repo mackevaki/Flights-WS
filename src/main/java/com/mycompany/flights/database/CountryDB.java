@@ -2,18 +2,16 @@ package com.mycompany.flights.database;
 
 import com.mycompany.flights.database.abstracts.AbstractObjectDB;
 import com.mycompany.flights.spr.objects.Country;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CountryDB extends AbstractObjectDB<Country> {
-    public final static String TABLE_SPR_COUNTRY = "avia.spr_country";
-
-    private static CountryDB instance;
+    public final static String TABLE_SPR_COUNTRY = "spr_country";
 
     private CountryDB() {
         super(TABLE_SPR_COUNTRY);
     }
+    private static CountryDB instance;
 
     public static CountryDB getInstance() {
         if (instance == null) {

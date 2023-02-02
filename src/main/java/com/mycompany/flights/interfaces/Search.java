@@ -2,11 +2,10 @@ package com.mycompany.flights.interfaces;
 
 import com.mycompany.flights.objects.Flight;
 import com.mycompany.flights.spr.objects.City;
-
-import java.util.List;
+import java.util.ArrayList;
 
 public interface Search {
-    List<Flight> searchFlight(long date, City cityFrom, City cityTo);
-
-    List<City> getAllCities();
+    ArrayList<Flight> searchFlight(long date, City cityFrom, City cityTo);
+    
+    ArrayList<City> getAllCities();
 }

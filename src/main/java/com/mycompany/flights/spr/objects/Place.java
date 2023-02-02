@@ -2,10 +2,10 @@ package com.mycompany.flights.spr.objects;
 
 public class Place {
     private long id;
-    private char seatLetter;
-    private int seatNumber;
-    private boolean busy;
+    private String seatLetter;
+    private int seatNumber;    
     private FlightClass flightClass;
+    private boolean busy;
 
     public long getId() {
         return id;
@@ -23,11 +23,11 @@ public class Place {
         this.flightClass = flightClass;
     }
 
-    public char getSeatLetter() {
+    public String getSeatLetter() {
         return seatLetter;
     }
 
-    public void setSeatLetter(char seatLetter) {
+    public void setSeatLetter(String seatLetter) {
         this.seatLetter = seatLetter;
     }
 

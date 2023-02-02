@@ -1,7 +1,6 @@
 package com.mycompany.flights.spr.objects;
 
 public class Country {
-
     private long id;
     private String name;
     private String desc;
@@ -44,7 +43,7 @@ public class Country {
         return code;
     }
 
-    public void setCode(String shortName) {
-        this.code = shortName;
+    public void setCode(String code) {
+        this.code = code;
     }
 }

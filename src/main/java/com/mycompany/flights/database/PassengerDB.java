@@ -2,20 +2,19 @@ package com.mycompany.flights.database;
 
 import com.mycompany.flights.database.abstracts.AbstractObjectDB;
 import com.mycompany.flights.objects.Passenger;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class PassengerDB extends AbstractObjectDB<Passenger> {
-    public final static String TABLE_PASSENGER = "avia.passenger";
-
-    private static PassengerDB instance;
+    public final static String TABLE_PASSENGER = "passenger";
 
     private PassengerDB() {
         super(TABLE_PASSENGER);
     }
+    private static PassengerDB instance;
 
     public static PassengerDB getInstance() {
         if (instance == null) {
@@ -30,16 +29,15 @@ public class PassengerDB extends AbstractObjectDB<Passenger> {
         passenger.setId(rs.getLong("id"));
         passenger.setDocumentNumber(rs.getString("document_number"));
         passenger.setEmail(rs.getString("email"));
-        passenger.setFamilyName( rs.getString("family_name"));
+        passenger.setFamilyName(rs.getString("family_name"));
         passenger.setGivenName(rs.getString("given_name"));
         passenger.setMiddleName(rs.getString("middle_name"));
         passenger.setPhone(rs.getString("phone"));
         return passenger;
     }
-
     public PreparedStatement getInsertStmt(Passenger passenger) throws SQLException {
         Connection conn = AviaDB.getInstance().getConnection();
-        PreparedStatement stmt = conn.prepareStatement("insert into " + TABLE_PASSENGER + "(given_name, middle_name, family_name, document_number, email, phone) values (?,?,?,?,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("insert into " + TABLE_PASSENGER + "(given_name, middle_name, family_name, document_number, email, phone) values (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1, passenger.getGivenName());
         stmt.setString(2, passenger.getMiddleName());
         stmt.setString(3, passenger.getFamilyName());

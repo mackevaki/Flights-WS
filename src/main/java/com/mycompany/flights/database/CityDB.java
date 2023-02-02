@@ -1,21 +1,19 @@
 package com.mycompany.flights.database;
-
 import com.mycompany.flights.database.abstracts.AbstractObjectDB;
 import com.mycompany.flights.spr.objects.City;
 import com.mycompany.flights.spr.objects.Country;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CityDB extends AbstractObjectDB<City> {
-    public final static String TABLE_SPR_CITY = "avia.spr_city";
+    public final static String TABLE_SPR_CITY = "spr_city";
 
-    private static CityDB instance;
     private CityDB() {
         super(TABLE_SPR_CITY);
     }
+    private static CityDB instance;
 
     public static CityDB getInstance() {
         if (instance == null) {
@@ -38,7 +36,7 @@ public class CityDB extends AbstractObjectDB<City> {
         city.setCode(rs.getString("code"));
 
         Country country = CountryDB.getInstance().executeObject(CountryDB.getInstance().getObjectByID(rs.getLong("country_id")));
-
+        
         city.setCountry(country);
         city.setDesc(rs.getString("desc"));
         city.setName(rs.getString("name"));

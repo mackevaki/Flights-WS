@@ -3,11 +3,11 @@ package com.mycompany.flights.spr.objects;
 import java.util.List;
 
 public class Aircraft {
-
     private long id;
     private String name;
     private String desc;
     private List<Place> placeList;
+    private List<Place> freePlaceList;
     private Company company;
 
     public long getId() {
@@ -52,5 +52,13 @@ public class Aircraft {
 
     public void setPlaceList(List<Place> placeList) {
         this.placeList = placeList;
+    }
+
+    public List<Place> getFreePlaceList() {
+        return freePlaceList;
+    }
+
+    public void setFreePlaceList(List<Place> freePlaceList) {
+        this.freePlaceList = freePlaceList;
     }
 }

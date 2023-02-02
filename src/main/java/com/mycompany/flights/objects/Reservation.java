@@ -1,23 +1,15 @@
 package com.mycompany.flights.objects;
 
 import com.mycompany.flights.spr.objects.Place;
-
 import java.util.Calendar;
-
-
 
 public class Reservation {
     private long id;
     private Flight flight;
-
     private Passenger passenger;
-    
     private Place place;
-    
     private String addInfo;
-    
     private Calendar reserveDateTime;
-    
     private String code;
 
     public long getId() {
@@ -75,8 +67,4 @@ public class Reservation {
     public void setCode(String code) {
         this.code = code;
     }
-    
-    
-    
-
 }

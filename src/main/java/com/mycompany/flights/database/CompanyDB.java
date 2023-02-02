@@ -2,18 +2,16 @@ package com.mycompany.flights.database;
 
 import com.mycompany.flights.database.abstracts.AbstractObjectDB;
 import com.mycompany.flights.spr.objects.Company;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CompanyDB extends AbstractObjectDB<Company> {
-    public final static String TABLE_SPR_COMPANY = "avia.spr_company";
-
-    private static CompanyDB instance;
+    public final static String TABLE_SPR_COMPANY = "spr_company";
 
     private CompanyDB() {
         super(TABLE_SPR_COMPANY);
     }
+    private static CompanyDB instance;
 
     public static CompanyDB getInstance() {
         if (instance == null) {

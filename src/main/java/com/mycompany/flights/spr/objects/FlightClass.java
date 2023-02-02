@@ -1,7 +1,6 @@
 package com.mycompany.flights.spr.objects;
 
 public class FlightClass {
-
     private long id;
     private String name;
     private String desc;

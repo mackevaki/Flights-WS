@@ -5,7 +5,7 @@ import com.mycompany.flights.objects.Flight;
 import com.mycompany.flights.objects.Passenger;
 import com.mycompany.flights.objects.Reservation;
 import com.mycompany.flights.spr.objects.Place;
-
+import com.mycompany.flights.utils.GMTCalendar;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,12 +13,12 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 public class ReservationDB extends AbstractObjectDB<Reservation> {
-    public final static String TABLE_RESERVATION = "avia.reservation";
+    public final static String TABLE_RESERVATION = "reservation";
 
-    private static ReservationDB instance;
     private ReservationDB() {
         super(TABLE_RESERVATION);
     }
+    private static ReservationDB instance;
 
     public static ReservationDB getInstance() {
         if (instance == null) {
@@ -38,48 +38,47 @@ public class ReservationDB extends AbstractObjectDB<Reservation> {
         stmt.setString(6, reservation.getCode());
         return stmt;
     }
-
-    public PreparedStatement getStmtByDocumentNumber(String docNumber) throws SQLException {
+    
+     public PreparedStatement getStmtByDocumentNumber(String docNumber) throws SQLException {
         Connection conn = AviaDB.getInstance().getConnection();
-
+        
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM avia.reservation r INNER JOIN avia.passenger p ON p.id=r.passenger_id ");
-        sb.append(" WHERE p.document_number=?");
-
+        sb.append("SELECT * FROM reservation r inner join passenger p on p.id=r.passenger_id ");
+        sb.append(" where p.document_number=?");
+        
         PreparedStatement stmt = conn.prepareStatement(sb.toString());
         stmt.setString(1, docNumber);
-
+        
         return stmt;
     }
-
-    public PreparedStatement getStmtByFamilyName(String familyName) throws SQLException {
+    
+     public PreparedStatement getStmtByFamilyName(String familyName) throws SQLException {
         Connection conn = AviaDB.getInstance().getConnection();
-
+        
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT * FROM avia.reservation r INNER JOIN avia.passenger p ON p.id=r.passenger_id ");
-        sb.append(" WHERE p.family_name=?");
-
+        sb.append("SELECT * FROM reservation r inner join passenger p on p.id=r.passenger_id ");
+        sb.append(" where p.family_name=?");
+        
         PreparedStatement stmt = conn.prepareStatement(sb.toString());
         stmt.setString(1, familyName);
-
+        
         return stmt;
     }
-
-
+     
     public PreparedStatement getStmtByCode(String code) throws SQLException {
+        
         Connection conn = AviaDB.getInstance().getConnection();
-
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM avia.reservation r inner join passenger p on p.id=r.passenger_id where r.code=?");
+        
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM reservation r inner join passenger p on p.id=r.passenger_id where r.code=?");
         stmt.setString(1, code);
-
+        
         return stmt;
     }
-
-
+      
     public PreparedStatement getStmtByDateReserv(Calendar dateReserv) throws SQLException {
         Connection conn = AviaDB.getInstance().getConnection();
-
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM avia.reservation where reserve_datetime>=? and  reserve_datetime<?");
+        
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM reservation where reserve_datetime>=? and reserve_datetime<?");
 
         // оставить только дату, чтобы искать рейсы за все 24 часа
         clearTime(dateReserv);
@@ -91,9 +90,8 @@ public class ReservationDB extends AbstractObjectDB<Reservation> {
         stmt.setLong(1, dateReserv.getTimeInMillis());
         stmt.setLong(2, dateTimeInterval.getTimeInMillis());
         return stmt;
-    }
-
-
+    } 
+      
     @Override
     public Reservation fillObject(ResultSet rs) throws SQLException {
         Reservation reservation = new Reservation();
@@ -108,7 +106,7 @@ public class ReservationDB extends AbstractObjectDB<Reservation> {
         Place place = PlaceDB.getInstance().executeObject(PlaceDB.getInstance().getObjectByID(rs.getLong("place_id")));
         reservation.setPlace(place);
 
-        Calendar c = Calendar.getInstance();
+        Calendar c = GMTCalendar.getInstance();
         c.setTimeInMillis(rs.getLong("reserve_datetime"));
 
         reservation.setReserveDateTime(c);

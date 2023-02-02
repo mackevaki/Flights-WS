@@ -1,6 +1,7 @@
 package com.mycompany.flights.objects;
 
 public class Passenger {
+
     private long id;
     private String givenName;
     private String middleName;
@@ -64,6 +65,4 @@ public class Passenger {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    
-    
 }

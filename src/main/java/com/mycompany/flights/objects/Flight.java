@@ -2,15 +2,13 @@ package com.mycompany.flights.objects;
 
 import com.mycompany.flights.spr.objects.Aircraft;
 import com.mycompany.flights.spr.objects.City;
-
 import java.util.Calendar;
 
-
-
 public class Flight {
+
     private String duration;// длительность полета в виде текста, этого поля нет в таблице
     private boolean existFreePlaces;
-
+    
     private long id;
     private String code;
     private Calendar dateDepart;
@@ -26,7 +24,7 @@ public class Flight {
     public void setId(long id) {
         this.id = id;
     }
-
+    
     public String getCode() {
         return code;
     }
