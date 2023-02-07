@@ -42,7 +42,7 @@ public class PlaceDB extends AbstractObjectDB<Place> {
     public PreparedStatement getPlaceStmtBusy(long aircraftId, long flightId) throws SQLException{
         Connection conn = AviaDB.getInstance().getConnection();
         PreparedStatement stmt = conn.prepareStatement("SELECT p.id, p.seat_letter, p.seat_number,p.flight_class_id, " +
-            "if ((select r.id from " + ReservationDB.TABLE_RESERVATION + " r where r.flight_id=? and r.place_id=p.id)>1,1,0) as busy " +
+            "if ((select r.id from " + ReservationDB.TABLE_RESERVATION + " r where r.flight_id=? and r.place_id=p.id)>0, 1, 0) as busy " +
             "FROM "+TABLE_SPR_PLACE + " p where id in (select place_id from " + TABLE_SPR_AIRCRAFT_PLACE + " a1 where a1.aircraft_id=?)  order by flight_class_id, seat_letter");
         stmt.setLong(1, flightId);
         stmt.setLong(2, aircraftId);

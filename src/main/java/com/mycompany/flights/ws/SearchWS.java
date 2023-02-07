@@ -13,10 +13,16 @@ import com.mycompany.flights.spr.objects.City;
 import com.mycompany.flights.spr.objects.Place;
 import com.mycompany.flights.utils.GMTCalendar;
 import jakarta.jws.WebService;
+import jakarta.xml.ws.BindingType;
+import jakarta.xml.ws.soap.MTOM;
+import jakarta.xml.ws.soap.SOAPBinding;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
+@MTOM
 @WebService(serviceName = "SearchWS")
+@BindingType(value = SOAPBinding.SOAP12HTTP_MTOM_BINDING)
 public class SearchWS implements Search, Buy, Check {
     private SearchImpl searchImpl = new SearchImpl();
     private BuyImpl buyImpl = new BuyImpl();
