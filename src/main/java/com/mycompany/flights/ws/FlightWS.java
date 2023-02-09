@@ -6,12 +6,14 @@ import com.mycompany.flights.interfaces.Search;
 import com.mycompany.flights.interfaces.impls.BuyImpl;
 import com.mycompany.flights.interfaces.impls.CheckImpl;
 import com.mycompany.flights.interfaces.impls.SearchImpl;
+import com.mycompany.flights.interfaces.sei.FlightSEI;
 import com.mycompany.flights.objects.Flight;
 import com.mycompany.flights.objects.Passenger;
 import com.mycompany.flights.objects.Reservation;
 import com.mycompany.flights.spr.objects.City;
 import com.mycompany.flights.spr.objects.Place;
 import com.mycompany.flights.utils.GMTCalendar;
+import jakarta.jws.HandlerChain;
 import jakarta.jws.WebService;
 import jakarta.xml.ws.BindingType;
 import jakarta.xml.ws.soap.MTOM;
@@ -21,9 +23,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 @MTOM
-@WebService(serviceName = "SearchWS")
+@WebService(serviceName = "FlightWS")
 @BindingType(value = SOAPBinding.SOAP12HTTP_MTOM_BINDING)
-public class SearchWS implements Search, Buy, Check {
+//@HandlerChain(file = "../../com/mycompany/flights/ws/SearchWS_handler.xml")
+@HandlerChain(file = "h.xml")
+//@WebService(endpointInterface = "com.mycompany.flights.interfaces.sei.FlightSEI")
+public class FlightWS implements FlightSEI {//implements FlightSEI {
     private SearchImpl searchImpl = new SearchImpl();
     private BuyImpl buyImpl = new BuyImpl();
     private CheckImpl checkImpl = new CheckImpl();
