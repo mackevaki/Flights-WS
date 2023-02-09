@@ -40,13 +40,13 @@
     <parameter name="scope" value="Application"/>
     <parameter name="className" value="org.apache.axis.monitor.SOAPMonitorService"/>
   </service>
-    <service name="SearchWS" provider="java:RPC" style="message" use="literal">
-        <parameter name="className" value="com.mycompany.flights.ws.SearchWS"/>
+    <service name="FlightWS" provider="java:RPC" style="message" use="literal">
+        <parameter name="className" value="com.mycompany.flights.ws.FlightWS"/>
         <parameter name="allowedMethods" value="*"/>
         <parameter name="scope" value="Application"/>
         <namespace>http://ws.flights.mycompany.com</namespace>
-        <typeMapping qname="ns:SearchImpl" xmlns:ns="http://ws.flights.mycompany.com"
-                     languageSpecificType="java:com.mycompany.flights.interfaces.impls.SearchImpl"
+        <typeMapping qname="ns:FlightImpl" xmlns:ns="http://ws.flights.mycompany.com"
+                     languageSpecificType="java:com.mycompany.flights.interfaces.impls.FlightImpl"
                      serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
                      deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>

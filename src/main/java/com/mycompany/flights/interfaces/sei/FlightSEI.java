@@ -5,6 +5,7 @@ import com.mycompany.flights.objects.Passenger;
 import com.mycompany.flights.objects.Reservation;
 import com.mycompany.flights.spr.objects.City;
 import com.mycompany.flights.spr.objects.Place;
+import exceptions.ArgumentException;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
@@ -15,11 +16,11 @@ import java.util.ArrayList;
 @WebService(name = "FlightWS", targetNamespace = "http://ws.flights.mycompany.com/")
 @SOAPBinding(style=Style.DOCUMENT, use=Use.LITERAL)
 public interface FlightSEI {
-    Reservation checkReservationByCode(@WebParam(name = "code") String code);
+    Reservation checkReservationByCode(@WebParam(name = "code") String code) throws ArgumentException;
 
     ArrayList<City> getAllCities();
 
-    ArrayList<Flight> searchFlight(@WebParam(name = "date") long date, @WebParam(name = "cityFrom") City cityFrom, @WebParam(name = "cityTo") City cityTo);
+    ArrayList<Flight> searchFlight(@WebParam(name = "date") Long date, @WebParam(name = "cityFrom") City cityFrom, @WebParam(name = "cityTo") City cityTo) throws ArgumentException;
    
-    boolean buyTicket(@WebParam(name = "flight") Flight flight, @WebParam(name = "place") Place place, @WebParam(name = "passenger") Passenger passenger, @WebParam(name = "addInfo") String addInfo);
+    boolean buyTicket(@WebParam(name = "flight") Flight flight, @WebParam(name = "place") Place place, @WebParam(name = "passenger") Passenger passenger, @WebParam(name = "addInfo") String addInfo) throws ArgumentException;
 }

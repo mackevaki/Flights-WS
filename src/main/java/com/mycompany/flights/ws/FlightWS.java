@@ -1,8 +1,5 @@
 package com.mycompany.flights.ws;
 
-import com.mycompany.flights.interfaces.Buy;
-import com.mycompany.flights.interfaces.Check;
-import com.mycompany.flights.interfaces.Search;
 import com.mycompany.flights.interfaces.impls.BuyImpl;
 import com.mycompany.flights.interfaces.impls.CheckImpl;
 import com.mycompany.flights.interfaces.impls.SearchImpl;
@@ -13,6 +10,7 @@ import com.mycompany.flights.objects.Reservation;
 import com.mycompany.flights.spr.objects.City;
 import com.mycompany.flights.spr.objects.Place;
 import com.mycompany.flights.utils.GMTCalendar;
+import exceptions.ArgumentException;
 import jakarta.jws.HandlerChain;
 import jakarta.jws.WebService;
 import jakarta.xml.ws.BindingType;
@@ -25,16 +23,27 @@ import java.util.Calendar;
 @MTOM
 @WebService(serviceName = "FlightWS")
 @BindingType(value = SOAPBinding.SOAP12HTTP_MTOM_BINDING)
-//@HandlerChain(file = "../../com/mycompany/flights/ws/SearchWS_handler.xml")
 @HandlerChain(file = "h.xml")
 //@WebService(endpointInterface = "com.mycompany.flights.interfaces.sei.FlightSEI")
-public class FlightWS implements FlightSEI {//implements FlightSEI {
+public class FlightWS implements FlightSEI {
     private SearchImpl searchImpl = new SearchImpl();
     private BuyImpl buyImpl = new BuyImpl();
     private CheckImpl checkImpl = new CheckImpl();
 
     @Override
-    public ArrayList<Flight> searchFlight(long date, City cityFrom, City cityTo) {
+    public ArrayList<Flight> searchFlight(Long date, City cityFrom, City cityTo) throws ArgumentException {
+        if (date == null || date.longValue() <= 0) {
+            throw new ArgumentException("Date is empty or less than zero");
+        }
+
+        if (cityFrom == null) {
+            throw new ArgumentException("City From is empty");
+        }
+
+        if (cityTo == null) {
+            throw new ArgumentException("City To is empty");
+        }
+
         ArrayList<Flight> list = new ArrayList<>();
         Calendar c = GMTCalendar.getInstance();
         c.setTimeInMillis(date);
@@ -52,7 +61,19 @@ public class FlightWS implements FlightSEI {//implements FlightSEI {
     }
 
     @Override
-    public boolean buyTicket(Flight flight, Place place, Passenger passenger, String addInfo) {
+    public boolean buyTicket(Flight flight, Place place, Passenger passenger, String addInfo) throws ArgumentException {
+        if (flight == null) {
+            throw new ArgumentException("Flight object is empty");
+        }
+
+        if (passenger == null) {
+            throw new ArgumentException("Passenger object is empty");
+        }
+
+        if (place == null) {
+            throw new ArgumentException("Place object is empty");
+        }
+
         boolean result = false;
 
         result = buyImpl.buyTicket(flight, place, passenger, addInfo);
@@ -61,7 +82,10 @@ public class FlightWS implements FlightSEI {//implements FlightSEI {
     }
 
     @Override
-    public Reservation checkReservationByCode(String code) {
+    public Reservation checkReservationByCode(String code) throws ArgumentException {
+        if (code == null || code.isEmpty()) {
+            throw new ArgumentException("Code is empty");
+        }
         return checkImpl.checkReservationByCode(code);
     }
 }
