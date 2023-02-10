@@ -1,20 +1,34 @@
 package com.mycompany.flights.objects;
 
+import com.mycompany.flights.annotations.ExceptionMessage;
 import com.mycompany.flights.spr.objects.Aircraft;
 import com.mycompany.flights.spr.objects.City;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
 import java.util.Calendar;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@ExceptionMessage(message = "Заполните объект Flight")
 public class Flight {
-
     private String duration;// длительность полета в виде текста, этого поля нет в таблице
     private boolean existFreePlaces;
     
     private long id;
     private String code;
+    
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Заполните дату вылета")
     private Calendar dateDepart;
     private Calendar dateCome;
     private Aircraft aircraft;
+    
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Заполните город вылета")
     private City cityFrom;
+    
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Заполните город прилета")    
     private City cityTo;
 
     public long getId() {

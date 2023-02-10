@@ -1,6 +1,15 @@
 package com.mycompany.flights.spr.objects;
 
+import com.mycompany.flights.annotations.ExceptionMessage;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@ExceptionMessage(message = "Укажите город")
 public class City {
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Не указан id города")
     private long id;
     private String name;
     private String desc;

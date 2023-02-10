@@ -1,5 +1,6 @@
 package com.mycompany.flights.ws;
 
+import com.mycompany.flights.annotations.ExceptionMessage;
 import com.mycompany.flights.interfaces.impls.BuyImpl;
 import com.mycompany.flights.interfaces.impls.CheckImpl;
 import com.mycompany.flights.interfaces.impls.SearchImpl;
@@ -13,14 +14,18 @@ import com.mycompany.flights.utils.GMTCalendar;
 import exceptions.ArgumentException;
 import jakarta.jws.HandlerChain;
 import jakarta.jws.WebService;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.ws.BindingType;
 import jakarta.xml.ws.soap.MTOM;
 import jakarta.xml.ws.soap.SOAPBinding;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@MTOM
+@MTOM(enabled = true)
 @WebService(serviceName = "FlightWS")
 @BindingType(value = SOAPBinding.SOAP12HTTP_MTOM_BINDING)
 @HandlerChain(file = "h.xml")
@@ -32,17 +37,12 @@ public class FlightWS implements FlightSEI {
 
     @Override
     public ArrayList<Flight> searchFlight(Long date, City cityFrom, City cityTo) throws ArgumentException {
-        if (date == null || date.longValue() <= 0) {
-            throw new ArgumentException("Date is empty or less than zero");
+        if (date == null || date <= 0) {
+            throw new ArgumentException("Дата вылета не заполнена");
         }
 
-        if (cityFrom == null) {
-            throw new ArgumentException("City From is empty");
-        }
-
-        if (cityTo == null) {
-            throw new ArgumentException("City To is empty");
-        }
+        checkObject(cityFrom, City.class);
+        checkObject(cityTo, City.class);        
 
         ArrayList<Flight> list = new ArrayList<>();
         Calendar c = GMTCalendar.getInstance();
@@ -62,18 +62,10 @@ public class FlightWS implements FlightSEI {
 
     @Override
     public boolean buyTicket(Flight flight, Place place, Passenger passenger, String addInfo) throws ArgumentException {
-        if (flight == null) {
-            throw new ArgumentException("Flight object is empty");
-        }
-
-        if (passenger == null) {
-            throw new ArgumentException("Passenger object is empty");
-        }
-
-        if (place == null) {
-            throw new ArgumentException("Place object is empty");
-        }
-
+        checkObject(flight, Flight.class);
+        checkObject(passenger, Passenger.class);
+        checkObject(place, Place.class);
+        
         boolean result = false;
 
         result = buyImpl.buyTicket(flight, place, passenger, addInfo);
@@ -84,8 +76,28 @@ public class FlightWS implements FlightSEI {
     @Override
     public Reservation checkReservationByCode(String code) throws ArgumentException {
         if (code == null || code.isEmpty()) {
-            throw new ArgumentException("Code is empty");
+            throw new ArgumentException("Код бронирования пустой");
         }
         return checkImpl.checkReservationByCode(code);
+    }
+    
+    private void checkObject(Object object, Class<?> c) throws ArgumentException {
+        if (object == null & c.isAnnotationPresent(ExceptionMessage.class)) {
+            throw new ArgumentException(c.getAnnotation(ExceptionMessage.class).message());
+        }
+        
+        for (Field field : c.getDeclaredFields()) {
+            if (field.isAnnotationPresent(XmlElement.class)) {
+                try {
+                    field.setAccessible(true);
+                    if (field.getAnnotation(XmlElement.class).required()
+                            && (field.get(object) == null || field.get(object).equals(""))) {
+                        throw new ArgumentException(field.getAnnotation(ExceptionMessage.class).message());
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException ex) {
+                    Logger.getLogger(FlightWS.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+            }
+        }
     }
 }

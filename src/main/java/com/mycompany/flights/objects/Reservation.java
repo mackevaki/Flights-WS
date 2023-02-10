@@ -1,8 +1,11 @@
 package com.mycompany.flights.objects;
 
 import com.mycompany.flights.spr.objects.Place;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import java.util.Calendar;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Reservation {
     private long id;
     private Flight flight;

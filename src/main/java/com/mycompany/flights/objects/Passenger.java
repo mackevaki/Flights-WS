@@ -1,11 +1,26 @@
 package com.mycompany.flights.objects;
 
-public class Passenger {
+import com.mycompany.flights.annotations.ExceptionMessage;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@ExceptionMessage(message = "Объект passenger должен быть заполнен")
+public class Passenger {
     private long id;
+    
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Заполните имя пассажира")
     private String givenName;
     private String middleName;
+    
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Заполните фамилию пассажира")
     private String familyName;
+    
+    @XmlElement(required = true)
+    @ExceptionMessage(message = "Заполните номер документа")
     private String documentNumber;
     private String email;
     private String phone;
